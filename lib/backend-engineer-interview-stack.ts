@@ -1,16 +1,60 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as cdk from "aws-cdk-lib";
+import { Construct } from "constructs";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import * as s3n from "aws-cdk-lib/aws-s3-notifications";
+import * as iam from "aws-cdk-lib/aws-iam";
+import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 
 export class BackendEngineerInterviewStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    // S3 Bucket
+    const bucket = new s3.Bucket(this, "backend-interview-bucket", {
+      bucketName: "backend-interview-bucket",
+    });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'BackendEngineerInterviewQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    // DynamoDB Table
+    const table = new dynamodb.Table(this, "backend-interview-table", {
+      tableName: "backend-interview-orders-table",
+      partitionKey: { name: "order_id", type: dynamodb.AttributeType.STRING },
+    });
+
+    // Lambda Function
+    const lambdaFunction = new NodejsFunction(
+      this,
+      "backend-interview-lambda",
+      {
+        functionName: "backend-interview-lambda",
+        runtime: lambda.Runtime.NODEJS_20_X,
+        handler: "index.handler",
+        entry: "src/index.ts",
+        bundling: {
+          minify: true,
+        },
+        environment: {
+          TABLE_NAME: table.tableName,
+        },
+      }
+    );
+
+    // Grant Lambda permissions to read/write to DynamoDB
+    table.grantReadWriteData(lambdaFunction);
+
+    // S3 event notification to Lambda
+    bucket.addEventNotification(
+      s3.EventType.OBJECT_CREATED_PUT,
+      new s3n.LambdaDestination(lambdaFunction)
+    );
+
+    // Grant S3 permissions to Lambda
+    lambdaFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["s3:GetObject"],
+        resources: [bucket.arnForObjects("*")],
+      })
+    );
   }
 }
