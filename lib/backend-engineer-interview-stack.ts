@@ -31,6 +31,7 @@ export class BackendEngineerInterviewStack extends cdk.Stack {
         runtime: lambda.Runtime.NODEJS_20_X,
         handler: "index.handler",
         entry: "src/index.ts",
+        timeout: cdk.Duration.seconds(10),
         bundling: {
           minify: true,
         },
