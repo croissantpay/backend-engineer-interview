@@ -32,6 +32,7 @@ export class BackendEngineerInterviewStack extends cdk.Stack {
         handler: "index.handler",
         entry: "src/index.ts",
         timeout: cdk.Duration.seconds(10),
+        memorySize: 1024,
         bundling: {
           minify: true,
         },
