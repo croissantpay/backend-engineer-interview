@@ -43,18 +43,13 @@ export class BackendEngineerInterviewStack extends cdk.Stack {
     // Grant Lambda permissions to read/write to DynamoDB
     table.grantReadWriteData(lambdaFunction);
 
+    // Grant S3 permissions to Lambda
+    bucket.grantReadWrite(lambdaFunction);
+
     // S3 event notification to Lambda
     bucket.addEventNotification(
       s3.EventType.OBJECT_CREATED_PUT,
       new s3n.LambdaDestination(lambdaFunction)
-    );
-
-    // Grant S3 permissions to Lambda
-    lambdaFunction.addToRolePolicy(
-      new iam.PolicyStatement({
-        actions: ["s3:GetObject"],
-        resources: [bucket.arnForObjects("*")],
-      })
     );
   }
 }
