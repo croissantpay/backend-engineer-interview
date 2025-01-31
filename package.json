@@ -5,8 +5,7 @@
     "backend-engineer-interview": "bin/backend-engineer-interview.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "dev": "ts-node src/local.ts",
     "cdk": "cdk"
   },
   "devDependencies": {
