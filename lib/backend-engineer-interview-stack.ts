@@ -4,7 +4,6 @@ import * as s3 from "aws-cdk-lib/aws-s3";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as s3n from "aws-cdk-lib/aws-s3-notifications";
-import * as iam from "aws-cdk-lib/aws-iam";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 
 export class BackendEngineerInterviewStack extends cdk.Stack {
@@ -14,12 +13,15 @@ export class BackendEngineerInterviewStack extends cdk.Stack {
     // S3 Bucket
     const bucket = new s3.Bucket(this, "backend-interview-bucket", {
       bucketName: "backend-interview-bucket",
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
 
     // DynamoDB Table
     const table = new dynamodb.Table(this, "backend-interview-table", {
       tableName: "backend-interview-orders-table",
       partitionKey: { name: "order_id", type: dynamodb.AttributeType.STRING },
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     // Lambda Function
