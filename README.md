@@ -1,13 +1,11 @@
-# Welcome to your CDK TypeScript project
+# Welcome to the Croissant Backend Engineer Interview
 
-This is a blank project for CDK development with TypeScript.
+Please find the instructions here: https://docs.google.com/document/d/1ikhJu3pB0Ep-hVVpinf7KRIGejl7lO_RIvINXYFT9JI/edit?usp=sharing
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Things you'll need
+- a configured AWS CLI
+- an AWS account to deploy into
 
 ## Useful commands
 
-- `npm run build` compile typescript to js
-- `npm run watch` watch for changes and compile
 - `npx cdk deploy` deploy this stack to your default AWS account/region
-- `npx cdk diff` compare deployed stack with current state
-- `npx cdk synth` emits the synthesized CloudFormation template
