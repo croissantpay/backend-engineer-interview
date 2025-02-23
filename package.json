@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",
+    "@types/csv-parse": "^1.1.12",
     "@types/node": "22.7.9",
     "aws-cdk": "2.177.0",
     "esbuild": "^0.24.2",
@@ -20,6 +21,7 @@
     "aws-cdk-lib": "2.177.0",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1692.0",
-    "constructs": "^10.0.0"
+    "constructs": "^10.0.0",
+    "csv-parse": "^5.6.0"
   }
 }
